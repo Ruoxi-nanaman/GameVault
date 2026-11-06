@@ -1,0 +1,74 @@
+
+.statistics-shell { background: #0b0e14; }
+.statistics-content { min-height: 0; padding: 24px 28px 32px; background: #0b0e14; }
+.statistics-heading { height: 66px; display: flex; align-items: flex-start; justify-content: space-between; }
+.statistics-heading h1 { margin: 0; color: var(--gv-text); font-size: 24px; line-height: 1.15; }
+.statistics-heading p { margin: 8px 0 0; color: var(--gv-muted); font-size: 12px; }
+.year-select { height: 38px; display: flex; align-items: center; gap: 7px; border: 1px solid var(--gv-border); border-radius: 5px; padding: 0 10px; color: #8794a6; background: var(--gv-panel); }
+.year-select select { width: 54px; border: 0; outline: 0; color: #aab4c1; background: transparent; font-size: 12px; }
+.statistics-cards { height: 108px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.statistics-cards .stat-card { height: 108px; }
+.statistics-middle { height: 226px; display: grid; grid-template-columns: minmax(0, 1.72fr) minmax(210px, .56fr); gap: 12px; margin-top: 16px; }
+.statistics-panel { border: 1px solid var(--gv-border); border-radius: 6px; background: var(--gv-panel); }
+.statistics-panel-heading { height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.statistics-panel-heading h2, .november-panel h2, .genres-panel h2 { margin: 0; color: #dce3ec; font-size: 14px; }
+.activity-panel { min-width: 0; padding: 0 16px 10px; }
+.activity-panel .statistics-panel-heading { height: 72px; }
+.activity-panel .statistics-panel-heading > div:first-child { display: flex; flex-direction: column; }
+.activity-panel .statistics-panel-heading strong { margin-top: 10px; color: #edf2f8; font-size: 20px; }
+.activity-panel .statistics-panel-heading strong small { color: #7e8a9b; font-size: 9px; font-weight: 400; }
+.period-toggle { height: 36px; display: grid; grid-template-columns: repeat(2, 68px); align-items: center; border-radius: 5px; overflow: hidden; background: #10141b; }
+.period-toggle button { height: 36px; border: 0; color: #94a0af; background: transparent; font-size: 12px; }
+.period-toggle button.active { color: white; background: #5d8ec3; }
+.activity-chart-wrap { height: 142px; position: relative; padding: 8px 0 24px 42px; }
+.chart-y-labels { position: absolute; top: 8px; bottom: 24px; left: 0; display: flex; flex-direction: column; justify-content: space-between; color: #69778a; font-size: 8px; }
+.chart-bars { height: 110px; position: relative; display: grid; grid-template-columns: repeat(12, 1fr); align-items: end; border-bottom: 1px solid #252c39; }
+.chart-grid-line { position: absolute; right: 0; left: 0; height: 1px; background: rgba(38, 45, 58, .8); }
+.chart-bar-column { height: 100%; position: relative; border: 0; display: flex; align-items: flex-end; justify-content: center; padding: 0; background: transparent; }
+.chart-bar { width: min(52%, 36px); display: block; border-radius: 2px 2px 0 0; background: #324052; transition: background .15s; }
+.chart-bar-column:nth-of-type(10) .chart-bar, .chart-bar-column.hovered .chart-bar { background: #6f9fd0; }
+.chart-bar-column.hovered { z-index: 2; }
+.chart-tooltip { position: absolute; z-index: 4; bottom: calc(100% - 8px); left: 50%; transform: translateX(-50%); min-width: 80px; border: 1px solid #334050; border-radius: 4px; padding: 6px; color: #dbe4ef; background: #151b24; font-size: 9px; white-space: nowrap; }
+.chart-x-labels { height: 24px; position: absolute; right: 0; bottom: 0; left: 42px; display: grid; grid-template-columns: repeat(12, 1fr); align-items: end; color: #69778a; text-align: center; font-size: 8px; }
+.november-panel { padding: 16px; }
+.november-panel h2 { font-size: 14px; }
+.november-panel > strong { display: block; margin-top: 14px; color: #edf2f8; font-size: 22px; }
+.november-panel > small { display: block; margin-top: 9px; color: #59a37a; font-size: 8px; }
+.november-panel dl { margin: 12px 0 0; }
+.november-panel dl div { height: 31px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #202633; }
+.november-panel dl div:last-child { border-bottom: 0; }
+.november-panel dt { color: #8794a6; font-size: 9px; }
+.november-panel dd { margin: 0; color: #d6dde7; font-size: 10px; }
+.statistics-bottom { height: 286px; display: grid; grid-template-columns: minmax(0, 1.72fr) minmax(210px, .56fr); gap: 12px; margin-top: 12px; }
+.statistics-bottom .statistics-panel-heading { height: 44px; padding: 0 16px; }
+.statistics-bottom .statistics-panel-heading h2 span { margin-left: 6px; color: #788497; font-size: 8px; }
+.most-played-table { margin: 0 16px; }
+.most-played-head, .most-played-row { display: grid; grid-template-columns: 30px 44px minmax(140px, 1fr) 100px 80px; align-items: center; }
+.most-played-head { height: 28px; color: #697386; font-size: 8px; border-bottom: 1px solid #202633; }
+.most-played-head span:first-child { grid-column: 2 / 4; }
+.most-played-head span:nth-child(2) { grid-column: 4; }
+.most-played-row { width: 100%; height: 48px; border: 0; border-bottom: 1px solid #202633; padding: 0; color: inherit; text-align: left; background: transparent; }
+.most-played-row:last-child { border-bottom: 0; }
+.rank { color: #697386; font-size: 8px; }
+.most-played-row img { width: 36px; height: 36px; border-radius: 4px; object-fit: cover; }
+.played-game-copy { display: flex; flex-direction: column; }
+.played-game-copy strong { color: #cfd6df; font-size: 9px; }
+.played-game-copy small { margin-top: 4px; color: #788497; font-size: 8px; }
+.played-time { color: #adb8c6; font-size: 9px; }
+.played-status { display: flex; align-items: center; gap: 6px; color: #8794a6; font-size: 8px; }
+.played-status i { width: 5px; height: 5px; border-radius: 50%; background: #6e9fd0; }
+.played-status.completed i { background: #7d9d91; }
+.genres-panel { padding: 14px 16px; }
+.genres-panel h2 { display: flex; flex-direction: column; font-size: 14px; }
+.genres-panel h2 span { margin-top: 5px; color: #788497; font-size: 8px; font-weight: 400; }
+.genre-list { margin-top: 10px; }
+.genre-row { margin-bottom: 9px; }
+.genre-row > div:first-child { height: 15px; display: flex; align-items: center; justify-content: space-between; color: #9da7b6; font-size: 9px; }
+.genre-row strong { color: #8f9daf; font-size: 8px; }
+.genre-track { height: 6px; margin-top: 5px; overflow: hidden; border-radius: 4px; background: #252c39; }
+.genre-track span { height: 100%; display: block; border-radius: 4px; background: #5e8eba; }
+.genre-footer { height: 30px; display: flex; align-items: center; gap: 7px; margin-top: 4px; border-top: 1px solid #202633; color: #697386; font-size: 8px; }
+
+@media (max-width: 980px) { .statistics-middle, .statistics-bottom { grid-template-columns: minmax(0, 1fr) 220px; } .statistics-cards { gap: 8px; } }
+@media (max-width: 760px) { .statistics-content { padding-inline: 14px; } .statistics-cards { height: auto; grid-template-columns: repeat(2, 1fr); } .statistics-middle, .statistics-bottom { height: auto; grid-template-columns: 1fr; } .activity-panel { height: 226px; } .november-panel { min-height: 210px; } .most-played-panel { min-height: 286px; } .genres-panel { min-height: 260px; } .chart-x-labels span:nth-child(even), .chart-bars .chart-bar-column:nth-child(even) { opacity: .45; } }
+@media (max-width: 520px) { .statistics-heading { height: 78px; } .statistics-cards { grid-template-columns: 1fr 1fr; } .statistics-cards .stat-card { padding-inline: 10px; } .most-played-head, .most-played-row { grid-template-columns: 24px 40px minmax(100px, 1fr) 70px; } .most-played-head span:nth-child(3), .played-status { display: none; } .period-toggle { grid-template-columns: repeat(2, 58px); } }

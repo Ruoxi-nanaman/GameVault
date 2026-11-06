@@ -1,0 +1,615 @@
+.login-page {
+  position: relative;
+  isolation: isolate;
+  height: 100svh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 48px 24px 90px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(42, 102, 155, 0.12), transparent 29%),
+    #090b10;
+}
+
+.login-glow {
+  position: absolute;
+  z-index: -1;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: rgba(55, 118, 180, 0.08);
+  filter: blur(90px);
+}
+
+.login-glow-left {
+  left: -160px;
+  top: 18%;
+}
+
+.login-glow-right {
+  right: -180px;
+  bottom: 12%;
+}
+
+.login-card {
+  width: min(460px, 100%);
+  min-height: 490px;
+  display: flex;
+  flex-direction: column;
+  padding: 34px 42px 38px;
+  border: 1px solid rgba(159, 181, 206, 0.13);
+  border-radius: 18px;
+  background: rgba(14, 17, 24, 0.92);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #edf4fb;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  color: #58a3dd;
+}
+
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.login-divider {
+  width: 100%;
+  height: 1px;
+  margin: 26px 0 0;
+  background: rgba(169, 188, 210, 0.09);
+}
+
+.login-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 52px;
+}
+
+.login-content h1 {
+  margin: 0;
+  color: #f6f8fb;
+  font-size: clamp(27px, 5vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+
+.login-subtitle {
+  margin: 14px 0 34px;
+  color: #9da8b6;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.steam-button {
+  width: 100%;
+  min-height: 54px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid rgba(118, 173, 220, 0.35);
+  border-radius: 9px;
+  color: #f8fbff;
+  background: #1b5e94;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.steam-button:hover:not(:disabled) {
+  background: #206da7;
+  border-color: rgba(150, 198, 238, 0.55);
+  transform: translateY(-1px);
+}
+
+.steam-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.steam-button:focus-visible {
+  outline: 3px solid rgba(88, 163, 221, 0.35);
+  outline-offset: 3px;
+}
+
+.steam-button:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+
+.steam-icon {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.development-login-button {
+  margin-top: 10px;
+  border: 0;
+  padding: 4px 8px;
+  color: #8997a8;
+  background: transparent;
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+.development-login-button:hover:not(:disabled) {
+  color: #b8c6d7;
+}
+
+.login-message {
+  width: 100%;
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(240, 174, 109, 0.18);
+  border-radius: 7px;
+  color: #d9b58e;
+  background: rgba(176, 112, 52, 0.08);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.login-support {
+  max-width: 350px;
+  margin: 25px 0 0;
+  color: #7f8997;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.login-disclaimer {
+  position: absolute;
+  bottom: 28px;
+  max-width: calc(100% - 40px);
+  margin: 0;
+  color: #667080;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+@media (max-height: 620px) {
+  .login-page {
+    padding-top: 20px;
+    padding-bottom: 62px;
+  }
+
+  .login-card {
+    min-height: 420px;
+  }
+
+  .login-divider {
+    margin-top: 18px;
+  }
+
+  .login-content {
+    padding-top: 28px;
+  }
+
+  .login-subtitle {
+    margin-bottom: 24px;
+  }
+
+  .login-support {
+    margin-top: 16px;
+  }
+
+  .login-disclaimer {
+    bottom: 18px;
+  }
+}
+
+@media (max-height: 480px) {
+  .login-card {
+    min-height: 355px;
+    padding-top: 18px;
+    padding-bottom: 20px;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+  }
+
+  .login-divider {
+    margin-top: 12px;
+  }
+
+  .login-content {
+    padding-top: 14px;
+  }
+
+  .login-content h1 {
+    font-size: 26px;
+  }
+
+  .login-subtitle {
+    margin: 8px 0 16px;
+  }
+
+  .steam-button {
+    min-height: 48px;
+  }
+
+  .login-support {
+    margin-top: 10px;
+  }
+}
+
+.dashboard-shell {
+  width: 100%;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  color: #c9d0dc;
+  background: #0b0e14;
+  font-size: 12px;
+}
+
+.dashboard-sidebar {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #202634;
+  background: #0d1119;
+}
+
+.sidebar-brand {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  border-bottom: 1px solid #202634;
+  color: #edf3fb;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sidebar-brand svg { color: #63a3dc; }
+
+.sidebar-nav { padding: 14px 8px; }
+
+.sidebar-link {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  border-radius: 5px;
+  color: #747f91;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.sidebar-link:hover { color: #bac5d3; background: rgba(39, 47, 62, 0.35); }
+.sidebar-link.active { color: #dce5f0; background: #1d2a3b; }
+
+.sidebar-footer { margin-top: auto; }
+.sidebar-footer > .sidebar-link { margin: 0 8px 10px; }
+
+.sync-status {
+  height: 48px;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 10px;
+  border-top: 1px solid #202634;
+}
+.sync-dot { width: 7px; height: 7px; margin-top: 3px; border-radius: 50%; background: #55a96c; }
+.sync-status div { min-width: 0; display: flex; flex-direction: column; }
+.sync-status strong { color: #bac3d1; font-size: 10px; }
+.sync-status small { margin-top: 3px; color: #697386; font-size: 8px; }
+
+.dashboard-main { min-width: 0; }
+.dashboard-header {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #202634;
+  background: #10131a;
+}
+
+.dashboard-search {
+  width: 220px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  color: #6f7888;
+}
+.dashboard-search input { width: 175px; border: 0; outline: 0; color: #aab4c4; background: transparent; font-size: 10px; }
+.dashboard-search input::placeholder { color: #667186; opacity: 1; }
+
+.header-actions { height: 100%; margin-left: auto; display: flex; align-items: center; }
+.sync-button, .icon-button, .profile-link, .steam-profile-button, .panel-heading button, .section-heading button {
+  border: 0; color: #9ea9b8; background: transparent;
+}
+.sync-button { height: 100%; display: flex; align-items: center; gap: 7px; padding: 0 12px; border-left: 1px solid #202634; border-right: 1px solid #202634; font-size: 10px; }
+.icon-button { width: 42px; height: 100%; border-right: 1px solid #202634; }
+.profile-copy { height: 100%; min-width: 106px; display: flex; align-items: center; gap: 7px; padding: 0 9px; }
+.profile-avatar { width: 24px; height: 24px; flex: 0 0 auto; display: inline-grid; place-items: center; border-radius: 50%; color: #5b8dc2; background: #202b3b; font-size: 9px; font-weight: 700; }
+.profile-copy div { display: flex; flex-direction: column; line-height: 1.25; }
+.profile-copy strong { color: #cbd2dc; font-size: 9px; }
+.profile-copy small { color: #6d7788; font-size: 8px; }
+.profile-link { height: 100%; display: flex; align-items: center; gap: 6px; padding: 0 12px; border-left: 1px solid #202634; font-size: 9px; }
+
+.dashboard-content {
+  height: calc(100svh - 50px);
+  overflow: hidden;
+  padding: 20px 24px 8px;
+  background: #0b0e14;
+}
+.dashboard-welcome { display: flex; align-items: flex-start; justify-content: space-between; }
+.dashboard-welcome h1 { margin: 0; color: #f1f4f8; font-size: 20px; line-height: 1.2; }
+.dashboard-welcome p { margin: 8px 0 0; color: #687386; font-size: 10px; }
+.steam-profile-button { height: 28px; padding: 0 10px; border: 1px solid #272f3d; border-radius: 4px; font-size: 9px; }
+
+.profile-status { height: 46px; display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.profile-status > div { display: flex; flex-direction: column; }
+.profile-status strong { color: #d1d7df; font-size: 9px; }
+.profile-status small { margin-top: 2px; color: #697386; font-size: 8px; }
+.online-status { height: 18px; display: inline-flex; align-items: center; gap: 5px; margin-left: 10px; padding: 0 7px; border-radius: 10px; color: #9eb9ad; background: #172027; font-size: 8px; }
+.online-status i { width: 5px; height: 5px; border-radius: 50%; background: #54aa73; }
+
+.stats-grid { height: 90px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.stat-card { position: relative; min-width: 0; padding: 10px 12px; border: 1px solid #202633; border-radius: 6px; background: #151922; }
+.stat-card-top { display: flex; align-items: center; justify-content: space-between; color: #778295; font-size: 8px; }
+.stat-card-top svg { color: #6f7e93; }
+.stat-card strong { display: block; margin-top: 10px; color: #e9edf4; font-size: 19px; line-height: 1; }
+.stat-card small { display: block; margin-top: 9px; color: #7f8998; font-size: 7px; }
+
+.recent-section { margin-top: 16px; }
+.section-heading { height: 28px; display: flex; align-items: center; justify-content: space-between; }
+.section-heading h2 { margin: 0; color: #d5dae3; font-size: 11px; }
+.section-heading button { font-size: 8px; color: #8996a7; }
+.recent-games-grid { height: 150px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.recent-game { min-width: 0; }
+.recent-game img { width: 100%; height: 118px; display: block; border-radius: 5px; object-fit: cover; background: #151922; }
+.recent-game > strong { display: block; margin-top: 7px; color: #d9dee7; font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.recent-game div { display: flex; justify-content: space-between; margin-top: 4px; color: #6c7788; font-size: 7px; }
+
+.dashboard-bottom { height: 206px; display: grid; grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr); gap: 10px; margin-top: 8px; }
+.dashboard-panel { border: 1px solid #202633; border-radius: 5px; background: #151922; }
+.panel-heading { height: 38px; display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 12px 0; }
+.panel-heading div { display: flex; align-items: baseline; gap: 7px; }
+.panel-heading strong { color: #d6dce5; font-size: 10px; }
+.panel-heading span { color: #697386; font-size: 7px; }
+.panel-heading button { color: #8794a5; font-size: 8px; }
+
+.activity-card { position: relative; }
+.activity-total { position: absolute; top: 54px; left: 12px; display: flex; align-items: baseline; gap: 7px; }
+.activity-total strong { color: #edf2f8; font-size: 16px; }
+.activity-total span { color: #798496; font-size: 8px; }
+.activity-chart { position: absolute; left: 12px; right: 12px; bottom: 25px; height: 92px; display: grid; grid-template-columns: repeat(7, 1fr); align-items: end; }
+.chart-lines { position: absolute; inset: 0 0 0 0; display: flex; flex-direction: column; justify-content: space-between; }
+.chart-lines i { height: 1px; background: #202633; }
+.chart-column { position: relative; height: 100%; border: 0; display: flex; align-items: flex-end; justify-content: center; background: transparent; }
+.chart-column span { width: 50px; max-width: 72%; height: 8px; border-radius: 2px 2px 0 0; background: #37404e; }
+.chart-column.highlight span { height: 55px !important; background: #6f9bca; }
+.chart-days { position: absolute; left: 12px; right: 12px; bottom: 8px; display: grid; grid-template-columns: repeat(7, 1fr); color: #697386; text-align: center; font-size: 7px; }
+
+.backlog-card { overflow: hidden; }
+.backlog-list { padding: 0 8px; }
+.backlog-game { width: 100%; height: 54px; display: grid; grid-template-columns: 38px minmax(0, 1fr) 12px; align-items: center; gap: 9px; border: 0; border-bottom: 1px solid #202633; color: inherit; text-align: left; background: transparent; }
+.backlog-game img { width: 38px; height: 38px; object-fit: cover; border-radius: 3px; }
+.backlog-game > span:not(.backlog-arrow) { min-width: 0; display: flex; flex-direction: column; }
+.backlog-game strong { color: #ccd3de; font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.backlog-game small { margin-top: 4px; color: #697386; font-size: 7px; }
+.backlog-arrow { color: #697386; font-size: 16px; }
+.backlog-tip { margin: 7px 12px 0; color: #697386; font-size: 7px; }
+
+.auth-loading { min-height: 100svh; display: grid; place-items: center; color: #9aa4b3; }
+
+/* Dashboard readability and scrolling refinements */
+.dashboard-shell {
+  min-height: 100svh;
+  grid-template-columns: 188px minmax(0, 1fr);
+  font-size: 14px;
+}
+
+.dashboard-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+.sidebar-brand {
+  height: 58px;
+  gap: 9px;
+  padding: 0 15px;
+  font-size: 16px;
+}
+
+.sidebar-nav {
+  padding: 16px 10px;
+}
+
+.sidebar-link {
+  height: 42px;
+  gap: 11px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+.sync-status {
+  height: 58px;
+  padding: 12px;
+}
+
+.sync-status strong { font-size: 11px; }
+.sync-status small { font-size: 9px; }
+
+.dashboard-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 58px;
+}
+
+.dashboard-search {
+  width: 270px;
+  gap: 9px;
+  padding: 0 16px;
+}
+
+.dashboard-search input { width: 220px; font-size: 12px; }
+
+.sync-button { padding: 0 15px; font-size: 12px; }
+.icon-button { width: 48px; }
+.profile-copy { min-width: 125px; gap: 9px; padding: 0 11px; }
+.profile-avatar { width: 30px; height: 30px; font-size: 10px; }
+.profile-copy strong { font-size: 11px; }
+.profile-copy small { font-size: 9px; }
+.profile-link { padding: 0 14px; font-size: 11px; }
+
+.dashboard-content {
+  height: auto;
+  min-height: calc(100svh - 58px);
+  overflow: visible;
+  padding: 24px 28px 32px;
+}
+
+.dashboard-welcome h1 { font-size: 24px; }
+.dashboard-welcome p { margin-top: 9px; font-size: 12px; }
+.steam-profile-button { height: 32px; padding: 0 12px; font-size: 11px; }
+
+.profile-status { height: 54px; gap: 10px; margin-top: 12px; }
+.profile-status strong { font-size: 11px; }
+.profile-status small { font-size: 9px; }
+.online-status { height: 21px; padding: 0 8px; font-size: 9px; }
+
+.stats-grid { height: 108px; gap: 12px; }
+.stat-card { padding: 12px 14px; }
+.stat-card-top { font-size: 10px; }
+.stat-card strong { margin-top: 12px; font-size: 23px; }
+.stat-card small { margin-top: 10px; font-size: 9px; }
+
+.recent-section { margin-top: 20px; }
+.section-heading { height: 34px; }
+.section-heading h2 { font-size: 13px; }
+.section-heading button { font-size: 10px; }
+.recent-games-grid { height: 188px; gap: 12px; }
+.recent-game img { height: 150px; }
+.recent-game > strong { margin-top: 8px; font-size: 11px; }
+.recent-game div { margin-top: 5px; font-size: 9px; }
+
+.dashboard-bottom { height: 250px; gap: 12px; margin-top: 12px; }
+.panel-heading { height: 44px; padding: 12px 14px 0; }
+.panel-heading strong { font-size: 12px; }
+.panel-heading span, .panel-heading button { font-size: 9px; }
+.activity-total { top: 64px; left: 14px; }
+.activity-total strong { font-size: 20px; }
+.activity-total span { font-size: 10px; }
+.activity-chart { left: 14px; right: 14px; bottom: 30px; height: 112px; }
+.chart-column span { width: 58px; }
+.chart-column.highlight span { height: 68px !important; }
+.chart-days { left: 14px; right: 14px; bottom: 10px; font-size: 9px; }
+.backlog-list { padding: 0 10px; }
+.backlog-game { height: 66px; grid-template-columns: 46px minmax(0, 1fr) 14px; gap: 10px; }
+.backlog-game img { width: 46px; height: 46px; }
+.backlog-game strong { font-size: 10px; }
+.backlog-game small { font-size: 9px; }
+.backlog-tip { margin: 9px 14px 0; font-size: 9px; }
+
+@media (max-width: 760px) {
+  .dashboard-shell { grid-template-columns: 56px minmax(0, 1fr); }
+  .recent-game { cursor: pointer; }
+
+  .sidebar-brand span, .sidebar-link span, .sync-status div { display: none; }
+  .sidebar-brand { justify-content: center; padding: 0; }
+  .sidebar-link { justify-content: center; padding: 0; }
+  .sync-status { justify-content: center; }
+  .dashboard-search { width: 150px; }
+  .profile-copy, .profile-link { display: none; }
+  .dashboard-content { height: auto; overflow: visible; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); height: auto; }
+  .stat-card { min-height: 108px; }
+  .recent-games-grid { height: auto; grid-template-columns: repeat(3, 1fr); }
+  .dashboard-bottom { height: 380px; grid-template-columns: 1fr; }
+}
+
+/* Shared application viewport and scrolling behavior */
+html, body, #root { height: 100%; }
+body { overflow: hidden; }
+.dashboard-shell {
+  height: 100svh;
+  min-height: 0;
+  overflow: hidden;
+}
+.dashboard-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100svh;
+  min-height: 0;
+  overflow: hidden;
+}
+.dashboard-main {
+  height: 100svh;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.dashboard-header {
+  position: relative;
+  flex: 0 0 var(--gv-header-height);
+}
+.dashboard-content,
+.library-content,
+.game-details-content,
+.achievements-content,
+.statistics-content,
+.wishlist-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 520px) {
+  .login-page {
+    justify-content: flex-start;
+    padding: 20px 16px 82px;
+  }
+
+  .login-card {
+    min-height: 470px;
+    padding: 28px 22px 32px;
+  }
+
+  .login-content {
+    padding-top: 48px;
+  }
+
+  .login-subtitle {
+    margin-bottom: 30px;
+  }
+}

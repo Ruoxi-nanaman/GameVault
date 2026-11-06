@@ -1,0 +1,94 @@
+
+.details-shell { background: #090d14; }
+.game-details-content { min-height: calc(100svh - 50px); overflow-y: auto; padding: 12px 16px 36px; background: #090d14; }
+.details-breadcrumb { height: 24px; display: flex; align-items: center; gap: 5px; margin-bottom: 8px; color: #697386; font-size: 9px; }
+.details-breadcrumb button { height: 24px; display: flex; align-items: center; gap: 5px; border: 0; padding: 0; color: #8792a2; background: transparent; font-size: 9px; cursor: pointer; }
+.details-breadcrumb strong { color: #8b96a6; font-weight: 500; }
+.game-hero { height: 220px; position: relative; overflow: hidden; border-radius: 5px 5px 0 0; background: #151922; }
+.game-hero-art { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center 48%; }
+.game-hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,12,18,.05) 32%, rgba(8,12,18,.92) 100%); }
+.game-hero-info { position: absolute; right: 18px; bottom: 18px; left: 18px; display: grid; grid-template-columns: 1fr auto; align-items: end; }
+.game-hero-info h1 { grid-column: 1; margin: 0; color: #edf2f7; font-size: 21px; font-weight: 500; }
+.game-hero-info p { grid-column: 1; margin: 5px 0 0; color: #9aa6b6; font-size: 8px; }
+.game-hero-info a { grid-column: 2; grid-row: 1 / 3; height: 30px; display: flex; align-items: center; gap: 7px; border: 1px solid #283448; border-radius: 4px; padding: 0 10px; color: #aab5c4; background: rgba(24,31,43,.78); text-decoration: none; font-size: 9px; }
+.game-summary-grid { height: 68px; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid #1b2230; background: #111722; }
+.game-summary-grid > div { display: flex; align-items: center; gap: 10px; padding: 0 18px; border-right: 1px solid #1b2230; color: #6d91bd; }
+.game-summary-grid > div:last-child { border-right: 0; }
+.game-summary-grid span { display: flex; flex-direction: column; }
+.game-summary-grid strong { color: #d9e0ea; font-size: 11px; }
+.game-summary-grid small { margin-top: 4px; color: #748195; font-size: 8px; }
+.game-details-grid { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(230px, .9fr); gap: 12px; margin-top: 12px; }
+.game-details-left { min-width: 0; }
+.game-panel { border: 1px solid #1d2431; border-radius: 5px; background: #111722; }
+.game-panel h2 { margin: 0; color: #d6dde7; font-size: 12px; }
+.progress-panel { min-height: 112px; padding: 16px 18px 12px; }
+.status-options { display: flex; gap: 7px; margin-top: 13px; }
+.status-options button { height: 31px; display: flex; align-items: center; gap: 6px; border: 1px solid #283244; border-radius: 4px; padding: 0 10px; color: #7f8a9c; background: #151b27; font-size: 9px; }
+.status-options button.active { border-color: #4b6fa1; color: #eaf1fb; background: #4d6f9d; }
+.progress-divider { height: 1px; margin-top: 13px; background: #1c2330; }
+.progress-stat { margin: 8px 0 0; color: #69778a; font-size: 8px; }
+.game-panel-heading { height: 34px; display: flex; align-items: flex-start; justify-content: space-between; }
+.game-panel-heading button { border: 0; padding: 0; color: #6f91b9; background: transparent; font-size: 8px; cursor: pointer; }
+.review-panel { min-height: 188px; margin-top: 12px; padding: 14px 18px; }
+.review-stars { height: 24px; display: flex; align-items: center; }
+.review-stars button { width: 14px; height: 22px; display: grid; place-items: center; border: 0; padding: 0; color: #596477; background: transparent; }
+.review-stars button.filled { color: #d6a94c; }
+.review-stars strong { margin-left: 5px; color: #dce4ef; font-size: 8px; }
+.review-stars small { margin-left: 5px; color: #697386; font-size: 8px; }
+.review-panel h3 { margin: 9px 0 0; color: #d4dbe5; font-size: 11px; }
+.review-panel p { max-width: 520px; margin: 10px 0 11px; color: #9aa5b5; font-size: 9px; line-height: 1.5; }
+.private-review { height: 24px; display: flex; align-items: center; gap: 6px; border-top: 1px solid #1d2431; color: #68748a; font-size: 8px; }
+.review-editor textarea { width: 100%; resize: vertical; box-sizing: border-box; border: 1px solid #283244; border-radius: 4px; padding: 10px; outline: none; color: #dbe4ef; background: #0d121b; font-family: inherit; font-size: 10px; }
+.review-editor > div { display: flex; justify-content: flex-end; gap: 7px; margin-top: 8px; }
+.review-editor button { height: 28px; border-radius: 4px; padding: 0 10px; font-size: 9px; }
+.review-cancel { border: 1px solid #283244; color: #9aa5b5; background: transparent; }
+.review-save { border: 0; color: white; background: #4e719f; }
+.achievements-panel { min-height: 312px; padding: 14px 14px 10px; }
+.achievement-summary { height: 23px; display: flex; align-items: center; justify-content: space-between; color: #8793a3; font-size: 8px; }
+.achievement-bar { height: 5px; overflow: hidden; border-radius: 3px; background: #252c39; }
+.achievement-bar span { height: 100%; display: block; border-radius: 3px; background: #4f7da9; }
+.achievement-list { margin-top: 8px; }
+.achievement-item { height: 48px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #1e2532; }
+.achievement-item:last-child { border-bottom: 0; }
+.achievement-icon { width: 28px; height: 28px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #8998ab; background: #202735; }
+.achievement-item > span:last-child { min-width: 0; display: flex; flex-direction: column; }
+.achievement-item strong { color: #cbd3df; font-size: 8px; }
+.achievement-item small { margin-top: 3px; color: #697386; font-size: 7px; }
+.achievement-item.locked { opacity: .55; }
+.achievement-item.locked .achievement-icon { border: 1px solid #303949; }
+
+.game-details-content { min-height: calc(100svh - var(--gv-header-height)); padding: 12px 16px 36px; }
+.details-breadcrumb { height: 28px; font-size: 11px; }
+.details-breadcrumb button { height: 28px; font-size: 11px; }
+.game-hero { height: 220px; }
+.game-hero-info h1 { font-size: 24px; }
+.game-hero-info p { font-size: 10px; }
+.game-hero-info a { height: 34px; font-size: 11px; }
+.game-summary-grid { height: 76px; }
+.game-summary-grid strong { font-size: 13px; }
+.game-summary-grid small { font-size: 9px; }
+.game-panel h2 { font-size: 13px; }
+.status-options button { height: 34px; font-size: 11px; }
+.progress-stat, .review-stars, .review-stars strong, .review-stars small, .private-review { font-size: 9px; }
+.review-panel h3 { font-size: 13px; }
+.review-panel p { font-size: 11px; }
+.achievement-item strong { font-size: 10px; }
+.achievement-item small { font-size: 8px; }
+
+@media (max-width: 980px) {
+  .game-details-grid { grid-template-columns: 1fr; }
+  .achievements-panel { min-height: 260px; }
+}
+@media (max-width: 760px) {
+  .game-details-content { padding-inline: 10px; }
+  .game-hero { height: 200px; }
+  .game-summary-grid { height: auto; grid-template-columns: repeat(2, 1fr); }
+  .game-summary-grid > div { height: 60px; border-bottom: 1px solid #1b2230; }
+  .status-options { flex-wrap: wrap; }
+}
+@media (max-width: 520px) {
+  .game-hero-info { right: 12px; left: 12px; }
+  .game-hero-info a { display: none; }
+  .game-summary-grid { grid-template-columns: 1fr 1fr; }
+  .game-summary-grid > div { padding-inline: 10px; }
+}
