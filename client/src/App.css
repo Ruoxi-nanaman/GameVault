@@ -388,7 +388,9 @@
 .section-heading h2 { margin: 0; color: #d5dae3; font-size: 11px; }
 .section-heading button { font-size: 8px; color: #8996a7; }
 .recent-games-grid { height: 150px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.recent-game { min-width: 0; }
+.recent-game { min-width: 0; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease; border-radius: 6px; }
+.recent-game:hover { transform: scale(1.03); background-color: #1a222e; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); }
+.recent-game:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
 .recent-game img { width: 100%; height: 118px; display: block; border-radius: 5px; object-fit: cover; background: #151922; }
 .recent-game > strong { display: block; margin-top: 7px; color: #d9dee7; font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .recent-game div { display: flex; justify-content: space-between; margin-top: 4px; color: #6c7788; font-size: 7px; }
@@ -555,7 +557,32 @@
 
 /* Shared application viewport and scrolling behavior */
 html, body, #root { height: 100%; }
-body { overflow: hidden; }
+body { 
+  overflow: hidden; 
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.4) transparent;
+}
+
+/* Global Minimal Scrollbar Design */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
 .dashboard-shell {
   height: 100svh;
   min-height: 0;

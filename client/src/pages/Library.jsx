@@ -16,6 +16,7 @@ function Library() {
   const [source, setSource] = useState('All sources')
   const [view, setView] = useState('grid')
   const [page, setPage] = useState(1)
+  const pageSize = 11
   const [games, setGames] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSyncing, setIsSyncing] = useState(false)
@@ -65,7 +66,9 @@ function Library() {
   }
 
   const filteredGames = useMemo(() => {
-    let filtered = games.filter((game) => game.title.toLowerCase().includes(search.toLowerCase()))
+    let result = games.filter((game) => game.title.toLowerCase().includes(search.toLowerCase()))
+    
+    // 1. Filter by Source
     if (source !== 'All sources') {
       const sourceMatches = {
         Owned: 'owned',
@@ -73,7 +76,7 @@ function Library() {
         'Recently played': 'recently_played_unknown',
         'Ownership unconfirmed': null,
       }
-      filtered = filtered.filter((game) => {
+      result = result.filter((game) => {
         if (source === 'Ownership unconfirmed') {
           return game.sourceEvidence?.owned?.status !== 'confirmed'
             && game.sourceEvidence?.family_shared?.status !== 'confirmed'
@@ -81,23 +84,101 @@ function Library() {
         return game.primaryAccessSource === sourceMatches[source]
       })
     }
+
+    // 2. Filter by Status
     if (status !== 'All games') {
       const normalizedStatus = status === 'Playing' ? 'Currently Playing'
         : status === 'Completed' ? 'Completed'
           : status === 'Backlog' ? 'Backlog'
             : status === 'Abandoned' ? 'Abandoned'
               : status
-      filtered = filtered.filter((game) => game.status === normalizedStatus)
+      result = result.filter((game) => game.status === normalizedStatus)
     }
-    if (sort === 'Playtime') filtered = [...filtered].sort((a, b) => b.playtime - a.playtime)
-    if (sort === 'Title') filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.title))
-    if (sort === 'Recently played') filtered = [...filtered].sort((a, b) => {
-      if (!a.lastPlayedAt) return 1
-      if (!b.lastPlayedAt) return -1
-      return new Date(b.lastPlayedAt) - new Date(a.lastPlayedAt)
-    })
-    return filtered
+
+    // 3. Alphabetical Sort (Default / Pre-sort)
+    if (sort === 'Playtime') {
+      result = [...result].sort((a, b) => (b.playtimeMinutes || 0) - (a.playtimeMinutes || 0))
+    } else if (sort === 'Recently played') {
+      result = [...result].sort((a, b) => {
+        if (!a.lastPlayedAt) return 1
+        if (!b.lastPlayedAt) return -1
+        return new Date(b.lastPlayedAt) - new Date(a.lastPlayedAt)
+      })
+    } else {
+      // Default to Title (Alphabetical A-Z)
+      result = [...result].sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true, sensitivity: 'base' }))
+    }
+    
+    return result
   }, [games, search, status, sort, source])
+
+  // Reset page to 1 when search or filters change
+  useEffect(() => {
+    setPage(1)
+  }, [search, status, platform, source, sort])
+
+  const totalPages = Math.ceil(filteredGames.length / pageSize) || 1
+  
+  // Clamp page to valid range if filtering reduces result set
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages)
+    }
+  }, [totalPages, page])
+
+  const paginatedGames = useMemo(() => {
+    const start = (page - 1) * pageSize
+    return filteredGames.slice(start, start + pageSize)
+  }, [filteredGames, page, pageSize])
+
+  const renderPagination = () => {
+    if (totalPages <= 1) return null
+
+    return (
+      <div className="library-pagination-card">
+        <div className="pagination-info">
+          <strong>Page {page}</strong>
+          <span>of {totalPages}</span>
+        </div>
+        <div className="pagination-pages">
+          {Array.from({ length: totalPages }, (_, i) => i + 1)
+            .filter(p => {
+              return p === 1 || p === totalPages || Math.abs(p - page) <= 1
+            })
+            .map((p, index, array) => (
+              <span key={p} style={{ display: 'flex', alignItems: 'center' }}>
+                {index > 0 && array[index - 1] !== p - 1 && (
+                  <span className="pagination-ellipsis">...</span>
+                )}
+                <button 
+                  type="button" 
+                  className={page === p ? 'active' : ''} 
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              </span>
+            ))}
+        </div>
+        <div className="pagination-controls">
+          <button 
+            type="button" 
+            disabled={page === 1} 
+            onClick={() => setPage(Math.max(1, page - 1))}
+          >
+            Previous
+          </button>
+          <button 
+            type="button" 
+            disabled={page === totalPages} 
+            onClick={() => setPage(Math.min(totalPages, page + 1))}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const statuses = ['All games', 'Playing', 'Completed', 'Backlog']
 
@@ -144,21 +225,21 @@ function Library() {
           </div>
 
           <div className="library-results-bar">
-            <span>Showing {filteredGames.length} of {libraryCounts?.totalUniqueGamesRecorded ?? games.length} games</span>
+            <span>
+              Showing {filteredGames.length > 0 ? (page - 1) * pageSize + 1 : 0}–
+              {Math.min(page * pageSize, filteredGames.length)} of {filteredGames.length} games
+            </span>
             <small>Sorted by {sort.toLowerCase()}</small>
           </div>
 
           <section className={`library-games ${view === 'list' ? 'library-list' : ''}`} aria-label="Game library">
             {isLoading && <p className="library-empty-state">Loading synchronized games…</p>}
             {!isLoading && filteredGames.length === 0 && <p className="library-empty-state">No synchronized games found. Use Sync library to import your Steam games.</p>}
-            {filteredGames.map((game) => <LibraryGameCard key={game.id} game={game} listView={view === 'list'} onOpen={(selected) => navigate(`/games/${selected.id}`)} />)}
+            {paginatedGames.map((game) => <LibraryGameCard key={game.id} game={game} listView={view === 'list'} onOpen={(selected) => navigate(`/games/${selected.id}`)} />)}
+            {view === 'grid' && renderPagination()}
           </section>
 
-          <nav className="library-pagination" aria-label="Library pagination">
-            <button type="button" disabled={page === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>Previous</button>
-            {[1, 2, 3].map((number) => <button key={number} className={page === number ? 'active' : ''} type="button" onClick={() => setPage(number)}>{number}</button>)}
-            <button className="pagination-next" type="button" onClick={() => setPage((value) => Math.min(3, value + 1))}>Next</button>
-          </nav>
+          {view === 'list' && renderPagination()}
         </main>
       </div>
     </div>

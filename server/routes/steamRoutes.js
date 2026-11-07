@@ -3,6 +3,8 @@ const { requireAuth } = require('../middleware/authMiddleware')
 const { syncOwnedGames, getOwnedGames } = require('../controllers/steamGamesController')
 const {
   getGameAchievements,
+  getAchievementLibrary,
+  getAchievementSummary,
   syncGameAchievements,
   syncAllGameAchievements,
 } = require('../controllers/steamAchievementsController')
@@ -10,6 +12,8 @@ const {
 const router = express.Router()
 router.post('/sync/games', requireAuth, syncOwnedGames)
 router.get('/games', requireAuth, getOwnedGames)
+router.get('/achievements', requireAuth, getAchievementLibrary)
+router.get('/achievements/summary', requireAuth, getAchievementSummary)
 router.post('/achievements/sync-all', requireAuth, syncAllGameAchievements)
 router.get('/games/:appId/achievements', requireAuth, getGameAchievements)
 router.post('/games/:appId/achievements/sync', requireAuth, syncGameAchievements)

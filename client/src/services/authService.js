@@ -29,6 +29,18 @@ export function syncSteamGames() {
   return request('/api/steam/sync/games', { method: 'POST' })
 }
 
+export function getLibraryAchievements() {
+  return request('/api/steam/achievements')
+}
+
+export function getAchievementSummary() {
+  return request('/api/steam/achievements/summary')
+}
+
+export function syncAllAchievements() {
+  return request('/api/steam/achievements/sync-all', { method: 'POST' })
+}
+
 export function startSteamLogin() {
   window.location.assign('/api/auth/steam')
 }

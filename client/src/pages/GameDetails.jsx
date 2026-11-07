@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, Clock3, ExternalLink, LockKeyhole, Star, Trophy } from 'lucide-react'
 import Sidebar from '../components/Sidebar.jsx'
@@ -6,13 +6,39 @@ import DashboardHeader from '../components/DashboardHeader.jsx'
 import GameProgress from '../components/GameProgress.jsx'
 import GameAchievements from '../components/GameAchievements.jsx'
 import { libraryGames } from '../data/libraryData.js'
-import { getSteamGames } from '../services/authService.js'
+import { getSteamGames, getLibraryAchievements } from '../services/authService.js'
 import './GameDetails.css'
 
 function GameDetails() {
   const { gameId } = useParams()
   const navigate = useNavigate()
   const [syncedGames, setSyncedGames] = useState(null)
+  
+  // Achievement specific state
+  const [achievementData, setAchievementData] = useState({ game: null, list: [] })
+  const [achievementsLoading, setAchievementsLoading] = useState(true)
+  const [achievementsError, setAchievementsError] = useState(null)
+
+  const fetchAchievements = useCallback(async () => {
+    setAchievementsLoading(true)
+    setAchievementsError(null)
+    try {
+      const result = await getLibraryAchievements()
+      const game = result.games.find(g => g.gameId === gameId)
+      const list = result.achievements.filter(a => a.gameId === gameId)
+      setAchievementData({ game, list })
+    } catch (err) {
+      setAchievementsError(err.message || 'Failed to load achievements')
+    } finally {
+      setAchievementsLoading(false)
+    }
+  }, [gameId])
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchAchievements()
+  }, [fetchAchievements])
+
   const selectedSyncedGame = syncedGames?.find((game) =>
     String(game.id) === gameId || String(game.steamAppId) === gameId
   )
@@ -83,7 +109,7 @@ function GameDetails() {
 
           <section className="game-summary-grid" aria-label="Game summary">
             <div><Clock3 size={17} /><span><strong>{game.playtime ?? 128.4} hrs</strong><small>Total playtime</small></span></div>
-            <div><Trophy size={17} /><span><strong>{game.achievements ?? 28} / {game.achievementTotal ?? 42}</strong><small>Achievements unlocked</small></span></div>
+            <div><Trophy size={17} /><span><strong>{achievementData.game?.unlockedAchievements ?? game.achievements ?? 0} / {achievementData.game?.totalAchievements ?? game.achievementTotal ?? 0}</strong><small>Achievements unlocked</small></span></div>
             <div><Clock3 size={17} /><span><strong>{game.id === 1 ? '2 hours ago' : 'Not played recently'}</strong><small>Last played</small></span></div>
             <div><Star size={17} /><span><strong>{rating ? `${rating} / 10` : 'Not rated'}</strong><small>Your rating</small></span></div>
           </section>
@@ -108,7 +134,13 @@ function GameDetails() {
                 )}
               </section>
             </div>
-            <GameAchievements unlocked={game.achievements ?? 28} total={game.achievementTotal ?? 42} />
+            <GameAchievements 
+              gameData={achievementData.game} 
+              achievements={achievementData.list} 
+              loading={achievementsLoading}
+              error={achievementsError}
+              onRetry={fetchAchievements}
+            />
           </div>
         </main>
       </div>

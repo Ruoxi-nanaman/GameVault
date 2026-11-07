@@ -9,7 +9,7 @@ import GamingActivity from '../components/GamingActivity.jsx'
 import { backlogGames } from '../data/dashboardData.js'
 import { libraryGames } from '../data/libraryData.js'
 import { useAuth } from '../contexts/useAuth.js'
-import { getSteamGames } from '../services/authService.js'
+import { getSteamGames, getAchievementSummary } from '../services/authService.js'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -17,6 +17,8 @@ function Dashboard() {
   const [ownedGames, setOwnedGames] = useState([])
   const [gamesLoadError, setGamesLoadError] = useState('')
   const [libraryCounts, setLibraryCounts] = useState(null)
+  const [achievementStats, setAchievementStats] = useState(null)
+  const [isStatsLoading, setIsStatsLoading] = useState(true)
 
   useEffect(() => {
     let active = true
@@ -30,6 +32,20 @@ function Dashboard() {
       .catch((error) => {
         if (active) setGamesLoadError(error.message || 'Unable to load synchronized games')
       })
+    
+    getAchievementSummary()
+      .then((stats) => {
+        if (active) {
+          setAchievementStats(stats)
+        }
+      })
+      .catch(() => {
+        // Silently fail or handle error - stats will remain null
+      })
+      .finally(() => {
+        if (active) setIsStatsLoading(false)
+      })
+
     return () => { active = false }
   }, [])
   const rawDisplayName = typeof user?.displayName === 'string'
@@ -55,8 +71,18 @@ function Dashboard() {
     { label: 'Total playtime', value: ownedGames.reduce((sum, game) => sum + (game.playtimeMinutes || 0), 0) > 0
       ? (ownedGames.reduce((sum, game) => sum + (game.playtimeMinutes || 0), 0) / 60).toFixed(1)
       : '0', detail: 'hours across your library', icon: Clock3 },
-    { label: 'Achievements unlocked', value: '—', detail: 'Not synchronized', icon: Trophy },
-    { label: 'Games completed', value: String(ownedGames.filter((game) => game.status === 'Completed').length), detail: 'from your GameVault library', icon: CheckCircle2 },
+    { 
+      label: 'Achievements unlocked', 
+      value: isStatsLoading ? '—' : (achievementStats?.totalUnlocked?.toLocaleString() ?? '0'), 
+      detail: isStatsLoading ? 'Synchronizing stats...' : 'total achievements unlocked', 
+      icon: Trophy 
+    },
+    { 
+      label: 'Perfect Games', 
+      value: isStatsLoading ? '—' : (achievementStats?.perfectGames?.toLocaleString() ?? '0'), 
+      detail: isStatsLoading ? 'Synchronizing stats...' : '100% achievement completion', 
+      icon: CheckCircle2 
+    },
   ]
 
   return (
@@ -92,17 +118,23 @@ function Dashboard() {
             <div className="section-heading"><h2>Recently played</h2><button type="button" onClick={() => navigate('/library')}>View library →</button></div>
             <div className="recent-games-grid">
               {ownedGames
-                .filter((game) => game.lastPlayedAt)
+                .filter((game) => game.sourceEvidence?.recently_played?.status === 'confirmed')
                 .sort((a, b) => new Date(b.lastPlayedAt) - new Date(a.lastPlayedAt))
                 .slice(0, 3)
                 .map((game) => (
                   <GameCard
                     key={game.id}
-                    game={{ ...game, subtitle: `${game.playtimeMinutes || 0} minutes`, lastPlayed: game.lastPlayedAt ? new Date(game.lastPlayedAt).toLocaleDateString() : 'Not played' }}
+                    game={{ 
+                      ...game, 
+                      subtitle: game.sourceEvidence?.recently_played?.recentPlaytimeMinutes 
+                        ? `${game.sourceEvidence.recently_played.recentPlaytimeMinutes} min recently` 
+                        : `${game.playtimeMinutes || 0} min total`, 
+                      lastPlayed: game.lastPlayedAt ? new Date(game.lastPlayedAt).toLocaleDateString() : 'Not played' 
+                    }}
                     onOpen={(selected) => navigate(`/games/${selected.id}`)}
                   />
                 ))}
-              {!ownedGames.some((game) => game.lastPlayedAt) && !gamesLoadError && (
+              {!ownedGames.some((game) => game.sourceEvidence?.recently_played?.status === 'confirmed') && !gamesLoadError && (
                 <p className="dashboard-empty-library">No recently played Steam games yet.</p>
               )}
             </div>

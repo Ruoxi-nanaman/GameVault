@@ -48,14 +48,9 @@
 .achievement-bar { height: 5px; overflow: hidden; border-radius: 3px; background: #252c39; }
 .achievement-bar span { height: 100%; display: block; border-radius: 3px; background: #4f7da9; }
 .achievement-list { margin-top: 8px; }
-.achievement-item { height: 48px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #1e2532; }
-.achievement-item:last-child { border-bottom: 0; }
-.achievement-icon { width: 28px; height: 28px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #8998ab; background: #202735; }
-.achievement-item > span:last-child { min-width: 0; display: flex; flex-direction: column; }
-.achievement-item strong { color: #cbd3df; font-size: 8px; }
-.achievement-item small { margin-top: 3px; color: #697386; font-size: 7px; }
-.achievement-item.locked { opacity: .55; }
-.achievement-item.locked .achievement-icon { border: 1px solid #303949; }
+.achievement-show-more { color: #9aa5b5; font-size: 10px; padding: 10px; border-radius: 4px; background: #1a202c; border: 1px solid #2d3748; transition: all 0.2s; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
+.achievement-show-more:hover { color: #d3dae4; background: #2d3748; }
+.achievement-empty { height: 100%; display: grid; place-items: center; color: var(--gv-muted); font-size: 11px; text-align: center; padding: 20px; }
 
 .game-details-content { min-height: calc(100svh - var(--gv-header-height)); padding: 12px 16px 36px; }
 .details-breadcrumb { height: 28px; font-size: 11px; }
