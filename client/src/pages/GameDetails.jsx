@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, Clock3, ExternalLink, LockKeyhole, Star, Trophy } from 'lucide-react'
 import Sidebar from '../components/Sidebar.jsx'
@@ -6,25 +6,42 @@ import DashboardHeader from '../components/DashboardHeader.jsx'
 import GameProgress from '../components/GameProgress.jsx'
 import GameAchievements from '../components/GameAchievements.jsx'
 import { libraryGames } from '../data/libraryData.js'
+import { getSteamGames } from '../services/authService.js'
 import './GameDetails.css'
 
 function GameDetails() {
   const { gameId } = useParams()
   const navigate = useNavigate()
-  const selected = libraryGames.find((game) => String(game.id) === gameId || String(game.steamAppId) === gameId)
+  const [syncedGames, setSyncedGames] = useState(null)
+  const selectedSyncedGame = syncedGames?.find((game) =>
+    String(game.id) === gameId || String(game.steamAppId) === gameId
+  )
+  const selected = selectedSyncedGame ?? libraryGames.find((game) => String(game.id) === gameId || String(game.steamAppId) === gameId)
+
+  useEffect(() => {
+    let active = true
+    getSteamGames()
+      .then((library) => {
+        if (active) setSyncedGames(library.games || [])
+      })
+      .catch(() => {
+        if (active) setSyncedGames([])
+      })
+    return () => { active = false }
+  }, [])
   const game = selected ?? {
     id: gameId,
-    steamAppId: 1245620,
+    steamAppId: null,
     title: gameId.replace(/-/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
     playtime: 0,
     status: 'Backlog',
     achievements: 0,
-    achievementTotal: 42,
+    achievementTotal: 0,
     rating: 0,
     developer: 'Unknown developer', publisher: 'Unknown publisher', releaseDate: 'Release date unavailable',
-    cover: 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg',
-    header: 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1245620/library_hero.jpg',
-    description: 'Game information will appear here when Steam and Supabase data are connected.',
+    cover: null,
+    header: null,
+    description: 'Game information is unavailable.',
   }
   const [status, setStatus] = useState(game.status === 'Playing' ? 'Playing' : game.status ?? 'Backlog')
   const [rating, setRating] = useState(game.rating ?? 9)
@@ -44,7 +61,7 @@ function GameDetails() {
     'The Witcher 3: Wild Hunt': 292030, 'Divinity: Original Sin 2': 435150,
     'Sea of Stars': 1244090, 'DARK SOULS III': 374320, 'Portal 2': 620,
   }
-  const steamAppId = game.steamAppId ?? steamAppIds[game.title] ?? 1245620
+  const steamAppId = game.steamAppId ?? steamAppIds[game.title] ?? null
 
   return (
     <div className="dashboard-shell details-shell">
@@ -60,7 +77,7 @@ function GameDetails() {
             <div className="game-hero-info">
               <h1>{game.title}</h1>
               <p>{game.developer ?? 'Steam developer information unavailable'}, {game.genres ?? 'Steam genres unavailable'} · Released {game.releaseDate ?? 'Release date unavailable'}</p>
-              <a href={`https://store.steampowered.com/app/${steamAppId}`} target="_blank" rel="noreferrer"><ExternalLink size={12} />View on Steam</a>
+              {steamAppId && <a href={`https://store.steampowered.com/app/${steamAppId}`} target="_blank" rel="noreferrer"><ExternalLink size={12} />View on Steam</a>}
             </div>
           </section>
 

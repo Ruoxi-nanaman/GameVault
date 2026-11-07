@@ -6,6 +6,7 @@ import GameDetails from './pages/GameDetails.jsx'
 import Achievements from './pages/Achievements.jsx'
 import Statistics from './pages/Statistics.jsx'
 import Wishlist from './pages/Wishlist.jsx'
+import Settings from './pages/Settings.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { AuthProvider } from './contexts/AuthContext.jsx'
 import './App.css'
@@ -24,7 +25,7 @@ function App() {
           <Route path="/achievements" element={<ProtectedRoute><Achievements /></ProtectedRoute>} />
           <Route path="/reviews" element={<ProtectedRoute><Navigate to="/dashboard" replace /></ProtectedRoute>} />
           <Route path="/statistics" element={<ProtectedRoute><Statistics /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Navigate to="/dashboard" replace /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

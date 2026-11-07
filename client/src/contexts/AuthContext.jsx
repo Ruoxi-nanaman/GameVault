@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getAuthSession, logout as logoutRequest, startDevelopmentLogin } from '../services/authService.js'
+import { getAuthSession, getSteamProfile, logout as logoutRequest, startDevelopmentLogin } from '../services/authService.js'
 import { AuthContext } from './authStore.js'
 
 export function AuthProvider({ children }) {
@@ -10,11 +10,31 @@ export function AuthProvider({ children }) {
     setIsLoading(true)
     try {
       const session = await getAuthSession()
-      setUser(session.authenticated ? session.user : null)
+      if (!session.authenticated) {
+        setUser(null)
+      } else if (session.user.authType === 'steam') {
+        await refreshSteamProfile(session.user)
+      } else {
+        setUser(session.user)
+      }
     } catch {
       setUser(null)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  async function refreshSteamProfile(currentUser = user) {
+    try {
+      const profile = await getSteamProfile()
+      setUser({
+        ...currentUser,
+        displayName: profile.displayName,
+        avatarUrl: profile.avatarUrl,
+        profileUrl: profile.profileUrl,
+      })
+    } catch {
+      setUser(currentUser)
     }
   }
 
@@ -25,11 +45,8 @@ export function AuthProvider({ children }) {
   }
 
   async function logout() {
-    try {
-      await logoutRequest()
-    } finally {
-      setUser(null)
-    }
+    await logoutRequest()
+    setUser(null)
   }
 
   useEffect(() => {
@@ -38,7 +55,24 @@ export function AuthProvider({ children }) {
     async function restoreSession() {
       try {
         const session = await getAuthSession()
-        if (active) setUser(session.authenticated ? session.user : null)
+        if (!active) return
+        if (!session.authenticated) {
+          setUser(null)
+        } else if (session.user.authType === 'steam') {
+          try {
+            const profile = await getSteamProfile()
+            setUser({
+              ...session.user,
+              displayName: profile.displayName,
+              avatarUrl: profile.avatarUrl,
+              profileUrl: profile.profileUrl,
+            })
+          } catch {
+            setUser(session.user)
+          }
+        } else {
+          setUser(session.user)
+        }
       } catch {
         if (active) setUser(null)
       } finally {
@@ -56,4 +90,3 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   )
 }
-

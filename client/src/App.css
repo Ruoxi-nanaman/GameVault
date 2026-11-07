@@ -352,6 +352,7 @@
 .icon-button { width: 42px; height: 100%; border-right: 1px solid #202634; }
 .profile-copy { height: 100%; min-width: 106px; display: flex; align-items: center; gap: 7px; padding: 0 9px; }
 .profile-avatar { width: 24px; height: 24px; flex: 0 0 auto; display: inline-grid; place-items: center; border-radius: 50%; color: #5b8dc2; background: #202b3b; font-size: 9px; font-weight: 700; }
+.profile-avatar-image { display: block; object-fit: cover; }
 .profile-copy div { display: flex; flex-direction: column; line-height: 1.25; }
 .profile-copy strong { color: #cbd2dc; font-size: 9px; }
 .profile-copy small { color: #6d7788; font-size: 8px; }
@@ -366,7 +367,7 @@
 .dashboard-welcome { display: flex; align-items: flex-start; justify-content: space-between; }
 .dashboard-welcome h1 { margin: 0; color: #f1f4f8; font-size: 20px; line-height: 1.2; }
 .dashboard-welcome p { margin: 8px 0 0; color: #687386; font-size: 10px; }
-.steam-profile-button { height: 28px; padding: 0 10px; border: 1px solid #272f3d; border-radius: 4px; font-size: 9px; }
+.steam-profile-button { height: 28px; display: inline-flex; align-items: center; padding: 0 10px; border: 1px solid #272f3d; border-radius: 4px; color: #9ea9b8; text-decoration: none; font-size: 9px; }
 
 .profile-status { height: 46px; display: flex; align-items: center; gap: 8px; margin-top: 10px; }
 .profile-status > div { display: flex; flex-direction: column; }

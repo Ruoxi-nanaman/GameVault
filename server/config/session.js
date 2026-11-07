@@ -37,8 +37,13 @@ function destroySession(token) {
   sessions.delete(id)
 }
 
+function rotateSession(token, user) {
+  destroySession(token)
+  return createSession(user)
+}
+
 function readCookie(header = '') {
   return header.split(';').map((part) => part.trim()).find((part) => part.startsWith(`${COOKIE_NAME}=`))?.slice(COOKIE_NAME.length + 1) || null
 }
 
-module.exports = { COOKIE_NAME, createSession, getSession, destroySession, readCookie }
+module.exports = { COOKIE_NAME, createSession, getSession, destroySession, rotateSession, readCookie }

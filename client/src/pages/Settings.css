@@ -1,0 +1,215 @@
+.settings-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 28px 32px;
+  background: #0b0e14;
+}
+
+.settings-heading {
+  margin-bottom: 18px;
+}
+
+.settings-heading h1 {
+  margin: 0;
+  color: var(--gv-text);
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.settings-heading p {
+  margin: 9px 0 0;
+  color: var(--gv-muted);
+  font-size: 12px;
+}
+
+.settings-panel {
+  border: 1px solid var(--gv-border);
+  border-radius: 8px;
+  background: var(--gv-panel);
+}
+
+.account-panel {
+  width: min(720px, 100%);
+  padding: 18px;
+}
+
+.settings-panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gv-border);
+}
+
+.settings-panel-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(110, 157, 201, 0.18);
+  border-radius: 7px;
+  color: #84add4;
+  background: rgba(46, 78, 112, 0.18);
+}
+
+.account-avatar-image {
+  width: 38px;
+  height: 38px;
+  display: block;
+  border-radius: 7px;
+  object-fit: cover;
+}
+
+.settings-panel-heading h2 {
+  margin: 0;
+  color: var(--gv-text);
+  font-size: 15px;
+}
+
+.settings-panel-heading p {
+  margin: 5px 0 0;
+  color: var(--gv-muted);
+  font-size: 11px;
+}
+
+.account-details {
+  margin: 0;
+  padding: 8px 0;
+}
+
+.account-details div {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: center;
+  border-bottom: 1px solid rgba(32, 38, 51, 0.72);
+}
+
+.account-details dt {
+  color: var(--gv-muted);
+  font-size: 11px;
+}
+
+.account-details dd {
+  min-width: 0;
+  margin: 0;
+  color: #cfd7e3;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.account-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+}
+
+.logout-button {
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid rgba(205, 104, 104, 0.38);
+  border-radius: 6px;
+  color: #e2aaa7;
+  background: rgba(142, 55, 55, 0.12);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.logout-button:hover:not(:disabled) {
+  border-color: rgba(225, 125, 125, 0.55);
+  color: #f0bfbb;
+  background: rgba(142, 55, 55, 0.2);
+}
+
+.logout-button:disabled,
+.logout-confirm-button:disabled,
+.logout-cancel-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.logout-error {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(205, 104, 104, 0.25);
+  border-radius: 6px;
+  color: #deb1ae;
+  background: rgba(142, 55, 55, 0.1);
+  font-size: 11px;
+}
+
+.logout-dialog-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 6, 10, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.logout-dialog {
+  width: min(420px, 100%);
+  padding: 20px;
+  border: 1px solid rgba(159, 181, 206, 0.16);
+  border-radius: 9px;
+  color: var(--gv-text);
+  background: #151922;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.logout-dialog h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.logout-dialog p {
+  margin: 10px 0 20px;
+  color: var(--gv-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.logout-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.logout-cancel-button,
+.logout-confirm-button {
+  height: 38px;
+  min-width: 82px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.logout-cancel-button {
+  border: 1px solid var(--gv-border);
+  color: #b4bfcd;
+  background: #10141b;
+}
+
+.logout-confirm-button {
+  border: 1px solid rgba(225, 125, 125, 0.48);
+  color: #f1c2be;
+  background: #753b3b;
+}
+
+@media (max-width: 520px) {
+  .settings-content {
+    padding: 20px 16px 24px;
+  }
+
+  .account-details div {
+    grid-template-columns: 118px minmax(0, 1fr);
+  }
+}

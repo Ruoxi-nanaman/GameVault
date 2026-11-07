@@ -39,6 +39,10 @@
 .library-status.completed { color: #9a9f68; }
 .library-status.backlog { color: #7f8897; }
 .library-status.abandoned { color: #b87878; }
+.library-source { padding-left: 5px; color: #9ab7d8; white-space: nowrap; }
+.library-source.source-family_shared { color: #b7a1d8; }
+.library-source.source-recently_played_unknown { color: #d0b77a; }
+.library-source.source-stale { color: #9a7f78; }
 
 .library-games.library-list { grid-template-columns: 1fr; }
 .library-game-card.list-view .library-game-main { height: 76px; display: grid; grid-template-columns: 105px minmax(0, 1fr); }

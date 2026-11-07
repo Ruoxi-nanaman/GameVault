@@ -17,6 +17,18 @@ export function logout() {
   return request('/api/auth/logout', { method: 'POST' })
 }
 
+export function getSteamProfile() {
+  return request('/api/auth/steam/profile')
+}
+
+export function getSteamGames() {
+  return request('/api/steam/games')
+}
+
+export function syncSteamGames() {
+  return request('/api/steam/sync/games', { method: 'POST' })
+}
+
 export function startSteamLogin() {
-  return request('/api/auth/steam')
+  window.location.assign('/api/auth/steam')
 }

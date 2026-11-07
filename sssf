@@ -1,0 +1,370 @@
+GAMEVAULT IMPLEMENTATION STATUS AND STEAM INTEGRATION READINESS AUDIT
+
+Audit scope: read-only inspection of authentication, Supabase schema, Express backend, frontend integration, environment configuration, and security.
+
+OVERALL STATUS
+
+The UI prototype is substantial, but Steam integration is not implemented. Development authentication works locally. The database migration exists but the identity and Supabase integration boundaries are incomplete. Steam OpenID, Steam Web API calls, OAuth/token storage, synchronization, and wishlist persistence are missing.
+
+1. AUTHENTICATION FOUNDATION
+
+Status: PARTIALLY IMPLEMENTED
+
+Implemented:
+- POST /api/auth/dev/login creates an in-memory signed development session for a fixed development user.
+- GET /api/auth/session restores session state.
+- POST /api/auth/logout destroys the session and clears the cookie.
+- The frontend AuthProvider restores authentication state on load.
+- Protected frontend routes redirect unauthenticated users to /login.
+- The frontend development-login button is visible only in Vite development mode.
+- requireAuth middleware validates the in-memory session cookie and can attach req.user.
+
+Missing:
+- Steam OpenID login and callback.
+- Steam identity verification and Steam ID extraction.
+- Mapping the Steam ID to a GameVault/Supabase user.
+- Session creation from a verified Steam identity.
+- Backend routes protected by requireAuth.
+- Session rotation and callback state/nonce/replay protection.
+
+Exact files:
+- server/controllers/authController.js
+- server/routes/authRoutes.js
+- server/config/session.js
+- server/middleware/authMiddleware.js
+- client/src/contexts/AuthContext.jsx
+- client/src/contexts/authStore.js
+- client/src/contexts/useAuth.js
+- client/src/services/authService.js
+- client/src/components/ProtectedRoute.jsx
+- client/src/pages/LoginPage.jsx
+
+Steam login result:
+GET /api/auth/steam currently returns HTTP 501 in authController.js.
+
+2. SUPABASE DATABASE
+
+Status: PARTIALLY IMPLEMENTED
+
+The initial migration defines users, games, user_games, achievements, user_achievements, game_reviews, and sync_logs.
+
+Users:
+- UUID primary key
+- Unique optional text steam_id
+- Username, display name, avatar, timestamps
+
+Games:
+- UUID primary key
+- Required unique positive Steam App ID
+- Title and optional metadata/artwork/developer/publisher/release fields
+- Created/updated timestamps
+
+User games:
+- User and game foreign keys
+- Playtime in minutes
+- Status: Currently Playing, Completed, Backlog, or Abandoned
+- Date added and last played timestamps
+- Unique user/game pair
+
+Achievements:
+- Game relationship, Steam achievement API name, title, description, icon, hidden flag
+- Unique game/achievement API name pair
+
+User achievements:
+- User and achievement relationships
+- Unlock state and unlocked timestamp
+- Unique user/achievement pair
+- Unlocked rows require unlocked_at
+
+Game reviews:
+- User and game relationships
+- Rating from 1 through 10
+- Optional review text
+- Unique user/game pair
+
+Sync logs:
+- User relationship
+- Pending, Running, Succeeded, or Failed status
+- Games synced count and error message
+- Start/completion timestamps
+
+Indexes:
+- User/game ownership, status, achievement ownership, game review lookup, and sync-log ordering.
+
+Triggers:
+- Updated-at triggers exist for users, games, user_games, user_achievements, and game_reviews.
+
+RLS:
+- Enabled on all application tables.
+- Shared games and achievements are public-read.
+- Private rows are intended to match auth.uid() to application UUIDs.
+- Review and sync-log policies exist.
+
+Missing or unconfirmed:
+- No confirmed migration application to local or remote Supabase.
+- No Steam SteamID/user identity mapping flow.
+- public.users.id is not documented as being automatically linked to auth.uid().
+- No wishlist table or wishlist synchronization fields.
+- No historical playtime record table if future activity charts require real history.
+- No synchronization source/version fields, Steam API cache fields, or sync result detail structure.
+- No Steam token fields for authenticated APIs, if Steam access requires them.
+
+Exact file:
+- supabase/migrations/20261107000000_initial_gamevault_schema.sql
+
+Schema readiness:
+The schema can support libraries, metadata, achievements, reviews, and basic sync logs, but it does not yet support a verified Steam-to-Supabase identity or Steam wishlist synchronization.
+
+3. BACKEND CONFIGURATION
+
+Status: PLACEHOLDER FOUNDATION
+
+Implemented:
+- Express 5 application setup
+- JSON request parsing
+- CORS with credentials and a configured frontend origin
+- dotenv environment loading
+- Development authentication routes
+- Signed in-memory sessions
+- Basic not-found and development/production error responses
+- Authentication middleware scaffold
+
+Exact files:
+- server/app.js
+- server/server.js
+- server/routes/authRoutes.js
+- server/controllers/authController.js
+- server/config/session.js
+- server/middleware/authMiddleware.js
+- server/middleware/errorMiddleware.js
+- server/.env.example
+- server/package.json
+
+Missing:
+- Steam OpenID flow
+- Steam Web API integration
+- Supabase server client/service module
+- Protected Steam/library/achievement/sync/wishlist routes
+- CSRF state and OpenID validation
+- Shared persistent session store
+- Session expiration cleanup
+- Steam and Supabase environment variables in server configuration
+- Rate limiting and security headers
+- Request validation and response schemas
+- Error classification for unavailable Steam metadata and private profiles
+
+Environment variables currently documented:
+- PORT
+- NODE_ENV
+- SESSION_SECRET
+- CLIENT_ORIGIN
+
+The server package has Express, CORS, dotenv, and Nodemon only. It has no Steam, Supabase, session-store, validation, or security middleware dependencies.
+
+4. FRONTEND INTEGRATION
+
+Status: PARTIALLY IMPLEMENTED
+
+Implemented:
+- Login page with Steam and development login controls
+- AuthContext session restoration
+- Auth service functions for session, development login, logout, and Steam login placeholder
+- ProtectedRoute wrapper
+- Vite /api proxy to the Express server
+- Supabase browser client initialization
+
+Exact files:
+- client/src/pages/LoginPage.jsx
+- client/src/contexts/AuthContext.jsx
+- client/src/services/authService.js
+- client/src/components/ProtectedRoute.jsx
+- client/src/lib/supabase.js
+- client/vite.config.js
+
+The current pages use local sample data. The browser Supabase client is not used by application code.
+
+Missing:
+- A Steam callback redirect/result handler
+- Real Steam login navigation
+- Server-authenticated data hooks
+- Supabase server-side identity integration
+- Steam synchronization status and errors
+- Mapping real Steam library/wishlist responses to UI models
+
+5. SECURITY FINDINGS
+
+| # | Severity | File | Lines | Vulnerability | Confidence |
+|---|----------|------|-------|---------------|------------|
+| 1 | HIGH | server/controllers/authController.js; server/routes/authRoutes.js | 5-8; authRoutes.js:6 | Development authentication remains available whenever NODE_ENV is not exactly production. On a misconfigured deployment it can provide a fixed authenticated development user. | 9/10 |
+| 2 | MEDIUM | server/config/session.js | 10-44 | Sessions are process-local and disappear or split across server restarts and multiple instances; no persistent/shared session store exists. | 8/10 |
+| 3 | MEDIUM | server/app.js | 8-10; server/routes/authRoutes.js | No Steam callback/OpenID state validation route exists, and protected backend routes do not currently use requireAuth. | 8/10 |
+| 4 | MEDIUM | supabase/migrations/20261107000000_initial_gamevault_schema.sql | 121-177 | RLS policies assume Supabase auth.uid(), while the Express development session identity is unrelated to Supabase Auth. Private data access is not securely wired yet. | 8/10 |
+| 5 | LOW | server/app.js | 8-10; server/package.json | No security headers or rate limiting middleware are configured, and all authentication/browser entry-point hardening remains unimplemented. | 7/10 |
+
+Additional security observations:
+- Development cookies are HttpOnly and SameSite=Lax; secure is enabled only in production.
+- Session IDs use random 32-byte tokens and HMAC-SHA256 signatures.
+- Session validation uses timing-safe signature comparison.
+- The logout route clears the cookie after removing the server session.
+- Session values are not persisted server-side or signed against a deployment shared secret in multi-instance deployments.
+- No session renewal or idle timeout cleanup is implemented.
+- The fixed development identity is not a real Steam or Supabase user.
+
+SECRETS AUDIT
+
+No Steam secret, Supabase service-role key, or Supabase private key is visible in the inspected source.
+
+The browser Supabase environment file contains a Supabase URL and publishable/anon key:
+- client/.env
+- client/src/lib/supabase.js
+
+These browser-visible values should remain publishable. The file is ignored by the root .gitignore, but its contents should not be committed accidentally.
+
+Missing server environment documentation should include future Supabase service variables and Steam credentials, with secrets kept server-side only.
+
+Recommended server environment categories:
+- NODE_ENV
+- PORT
+- SESSION_SECRET
+- CLIENT_ORIGIN
+- Steam OpenID return URL configuration
+- Steam Web API key
+- Supabase URL
+- Supabase service-role key or server-compatible database credentials
+
+The service-role key must never be placed in VITE_* variables or frontend code.
+
+RECOMMENDED FIXES BEFORE STEAM INTEGRATION
+
+1. Choose the identity architecture before implementation.
+   - Supabase Auth user plus Steam identity mapping, or
+   - Express Steam OpenID session plus an application user mapping and server-only Supabase access.
+
+2. Disable development authentication by default outside an explicit local development mode.
+
+3. Add a real Steam OpenID callback route, return-to validation, state validation, and verified Steam ID extraction.
+
+4. Define the mapping between public.users.id, Steam ID, Supabase auth.uid(), and Express sessions.
+
+5. Add server-only Supabase configuration and use service access only behind authenticated Express routes, or issue a Supabase-compatible identity if direct browser access is retained.
+
+6. Replace the in-memory session store before production deployment with a shared persistent store.
+
+7. Add secure production cookie settings and session rotation, expiration/cleanup, CSRF protections, and callback replay protection.
+
+8. Add wishlist schema support if wishlist synchronization is required.
+
+9. Add synchronization metadata and error handling before code reads Steam-owned/private data.
+
+10. Protect all backend synchronization routes with requireAuth and derive the Steam ID from the verified session, never from client-provided user/game identifiers.
+
+
+GAMEVAULT STAGE 1 IMPLEMENTATION REPORT
+
+Implementation status: completed for the requested backend identity foundation.
+
+FILES CREATED
+
+- server/config/supabase.js
+  Reusable lazy Supabase server client. Reads SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY only from server environment variables. Configures the client without browser session persistence.
+
+- server/test/auth.test.js
+  Backend tests for production blocking, explicit development configuration, development login, session restoration, and HttpOnly cookies.
+
+FILES MODIFIED
+
+- server/controllers/authController.js
+  Development login now requires both NODE_ENV=development and ENABLE_DEVELOPMENT_AUTH=true. Development sessions include explicit gameVaultUserId and steamId fields set to null. Cookie options now include HttpOnly, SameSite=Lax, Secure configuration, and Path=/.
+
+- server/config/session.js
+  No implementation change was required. Its current behavior remains an in-memory development session store with HMAC-signed tokens and a 24-hour TTL.
+
+- server/.env.example
+  Added SESSION_COOKIE_SECURE, ENABLE_DEVELOPMENT_AUTH, SUPABASE_URL, and SUPABASE_SERVICE_ROLE_KEY placeholders.
+
+- server/package.json
+  Added @supabase/supabase-js and changed the test script to node --test.
+
+- server/package-lock.json
+  Updated for the new server-side Supabase dependency.
+
+Identity mapping status:
+- The existing users table is sufficient for Stage 1.
+- public.users.id remains the application UUID.
+- public.users.steam_id remains the unique optional SteamID.
+- Development sessions do not create or imply a Steam identity or database user.
+- No migration was created, applied, or modified.
+
+SERVER ENVIRONMENT VARIABLES
+
+PORT=3001
+NODE_ENV=development
+SESSION_SECRET=replace-with-a-long-random-secret
+SESSION_COOKIE_SECURE=false
+ENABLE_DEVELOPMENT_AUTH=true
+CLIENT_ORIGIN=http://127.0.0.1:5173
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=replace-with-your-server-only-service-role-key
+
+Local setup:
+1. Copy server/.env.example to server/.env.
+2. Set a long random SESSION_SECRET.
+3. Add the Supabase project URL and service-role key only to server/.env.
+4. Never copy the service-role key into client/.env or a VITE_* variable.
+5. Keep ENABLE_DEVELOPMENT_AUTH=true only on a local development machine.
+
+RUNNING AND TESTING
+
+From the server directory:
+  npm install
+  npm test
+  npm run dev
+
+The backend listens on port 3001 by default.
+
+Development authentication test:
+1. Set NODE_ENV=development.
+2. Set ENABLE_DEVELOPMENT_AUTH=true.
+3. Start the Express server.
+4. POST to /api/auth/dev/login.
+5. GET /api/auth/session using the returned gamevault_session cookie.
+
+Steam login remains unimplemented and continues to return HTTP 501.
+
+Supabase service client behavior:
+- The client is created lazily when getSupabaseServerClient() is called.
+- Browser session persistence and automatic token refresh are disabled for server-side use.
+- The service-role key bypasses RLS and must not be used by frontend code.
+- Future private Express routes must validate the authenticated session, derive the GameVault user UUID, and explicitly enforce ownership when querying or writing private records.
+
+RLS assessment:
+- Existing public games and achievements read policies are relevant to direct Supabase Auth access.
+- Existing users, user_games, user_achievements, reviews, and sync_logs policies are relevant only where Supabase Auth JWTs and auth.uid() are used.
+- Those policies do not govern requests made by the service-role client.
+- Express must implement equivalent ownership checks for all private service-role operations.
+
+VALIDATION RESULTS
+
+- Backend tests: 3 passed, 0 failed.
+- Frontend lint: passed.
+- Frontend production build: passed.
+- Server production dependency audit: 0 vulnerabilities.
+- Development authentication: verified by automated HTTP tests.
+- Steam OpenID, Steam Web API, synchronization, and migrations: not implemented as required by Stage 1 scope.
+
+REMAINING LIMITATIONS
+
+- Sessions remain in process memory and are lost on restart.
+- Sessions are not shared across server instances.
+- No persistent session store is configured.
+- Session idle expiration cleanup and refresh/rotation are not implemented.
+- Production session cookies must use HTTPS and SESSION_COOKIE_SECURE=true.
+- CSRF protection, rate limiting, security headers, and callback state validation remain for later stages.
+
+IMPLEMENTATION READINESS SUMMARY
+
+Authentication: Placeholder plus working development mode; real Steam authentication missing.
+Supabase schema: Migration foundation exists; identity integration and wishlist/history gaps remain.
+Backend: Express scaffold exists; Steam and Supabase communication are missing.
+Frontend: Protected route and auth state are functional for development sessions; Steam login is placeholder only.
+Security: Development-session risk and missing identity/synchronization hardening must be addressed before real deployment.

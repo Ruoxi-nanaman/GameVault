@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import GameVaultLogo from '../components/GameVaultLogo.jsx'
 import SteamIcon from '../components/SteamIcon.jsx'
 import { startSteamLogin } from '../services/authService.js'
@@ -7,9 +7,13 @@ import { useNavigate } from 'react-router-dom'
 
 function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState(() => new URLSearchParams(window.location.search).get('error') || '')
   const { loginForDevelopment, user } = useAuth()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user) navigate('/dashboard', { replace: true })
+  }, [user, navigate])
 
   async function handleDevelopmentLogin() {
     setIsLoading(true)
